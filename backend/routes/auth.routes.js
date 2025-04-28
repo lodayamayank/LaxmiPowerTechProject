@@ -2,7 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
-
+import protect from '../middleware/authMiddleware.js'
 const router = express.Router();
 
 // @route   POST /api/auth/register
@@ -32,7 +32,6 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// @route   POST /api/auth/login
 // @desc    Log in and return JWT
 router.post('/login', async (req, res) => {
   try {
@@ -65,4 +64,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.get('/me',protect,(req,res) => {
+  res.json({
+    message:`Hello ${req.res.name}, your role is ${req.user.role}`,
+  });
+});
 export default router;
