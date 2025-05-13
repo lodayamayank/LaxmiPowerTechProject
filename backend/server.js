@@ -3,14 +3,21 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.routes.js';
-
-
+import userRoutes from './routes/user.routes.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import attendanceRoutes from './routes/attendance.routes.js';
 dotenv.config();
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 //const authRoutes =  require('./routes/auth.routes');
 app.use(cors());
 app.use(express.json());
 app.use('/api/auth',authRoutes);
+app.use('/api/users',userRoutes);
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+app.use('/api/attendance', attendanceRoutes);
 connectDB();
 //app.use('/api/auth', authRoutes);
 app.get('/',(req,res)=>{

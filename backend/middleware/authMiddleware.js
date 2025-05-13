@@ -5,24 +5,22 @@ const protect = async (req, res, next) => {
   let token;
 
   if (
-    req.headers.authoriztion &&
-    req.headers.authorization.startsWith("Bearer")
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
   ) {
     try {
-      //get tocken from header
-      token = req.headers.authorization.split(" ")[1];
-
-      //verify token
+      token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      //attach user info to request
-      req.user = await User.findById(decoded.id).select("-password");
+      req.user = await User.findById(decoded.id).select('-password');
+      console.log('✅ Authenticated:', req.user.email);
       next();
     } catch (err) {
-      res.status(401).json({ message: "Not authorised,token failed" });
+      console.log('❌ Token failed:', err.message);
+      return res.status(401).json({ message: 'Not authorized, token failed' });
     }
   } else {
-    res.status(401).json({ message: "Not authorised, no token" });
+    console.log('❌ No token in header');
+    res.status(401).json({ message: 'Not authorized, no token' });
   }
 };
 export default protect;
