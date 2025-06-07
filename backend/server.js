@@ -6,10 +6,6 @@ import attendanceRoutes from './routes/attendance.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import dotenv from 'dotenv';
 
-
-
-
-
 dotenv.config();
 const app = express();
 const allowedOrigin = 'http://192.168.29.92:5173'; // 👈 your frontend URL
@@ -26,7 +22,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/attendance', attendanceRoutes);
 
 app.use('/api/auth', authRoutes);
-mongoose.connect('mongodb://localhost:27017/attendance-app', {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
