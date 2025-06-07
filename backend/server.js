@@ -12,11 +12,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL, // https://your-vercel-url
-  'http://localhost:5173',
+  process.env.FRONTEND_URL,
+  'http://localhost:5173'
 ];
 
-// ✅ Use dynamic origin function to handle strict checks
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -26,8 +25,10 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true,
+  credentials: true
 }));
+
+// ✅ This line is critical for preflight (OPTIONS) support
 app.options('*', cors());
 
 
