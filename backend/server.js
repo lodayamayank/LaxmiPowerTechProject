@@ -8,7 +8,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const app = express();
-const allowedOrigin = 'http://192.168.29.92:5173'; // 👈 your frontend URL
+const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
+ // 👈 your frontend URL
 const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: allowedOrigin,
