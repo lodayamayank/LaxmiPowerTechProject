@@ -28,6 +28,8 @@ app.use(cors({
   },
   credentials: true,
 }));
+app.options('*', cors());
+
 
 // ✅ Important: Express middleware after CORS
 app.use(express.json());
