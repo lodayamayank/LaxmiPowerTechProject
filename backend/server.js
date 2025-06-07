@@ -1,27 +1,36 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import cors from 'cors';
-import dotenv from 'dotenv';
-import connectDB from './config/db.js';
-import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import attendanceRoutes from './routes/attendance.routes.js';
+import authRoutes from './routes/auth.routes.js';
+import dotenv from 'dotenv';
+
+
+
+
+
 dotenv.config();
 const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-//const authRoutes =  require('./routes/auth.routes');
-app.use(cors());
+const allowedOrigin = 'http://192.168.29.92:5173'; // 👈 your frontend URL
+
+app.use(cors({
+  origin: allowedOrigin,
+  credentials: true
+}));
+app.options('/api/attendance/punch', cors());
 app.use(express.json());
-app.use('/api/auth',authRoutes);
-app.use('/api/users',userRoutes);
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+app.use('/uploads', express.static('uploads'));
+
+app.use('/api/users', userRoutes);
 app.use('/api/attendance', attendanceRoutes);
-connectDB();
-//app.use('/api/auth', authRoutes);
-app.get('/',(req,res)=>{
-    res.send('API is running...');
+
+app.use('/api/auth', authRoutes);
+mongoose.connect('mongodb://localhost:27017/attendance-app', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server is running on port http://localhost:${PORT}`));
+
+app.listen(5000, '0.0.0.0', () => {
+  console.log('Server is running on port 5000');
+});

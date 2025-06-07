@@ -1,15 +1,13 @@
 import mongoose from 'mongoose';
 
 const attendanceSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   punchType: { type: String, enum: ['in', 'out'], required: true },
-  selfieUrl: { type: String }, // we will add file upload later
-  location: {
-    lat: Number,
-    lng: Number
-  },
-  timestamp: { type: Date, default: Date.now }
-});
+  timestamp: { type: Date, default: Date.now },
+  lat: Number,
+  lng: Number,
+  selfieUrl: String,
+}, { timestamps: true });
 
 const Attendance = mongoose.model('Attendance', attendanceSchema);
 export default Attendance;

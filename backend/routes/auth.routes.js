@@ -34,6 +34,8 @@ router.post('/register', async (req, res) => {
 
 // @desc    Log in and return JWT
 router.post('/login', async (req, res) => {
+  console.log('📲 Login attempt from:', req.ip);
+  console.log('Request body:', req.body); 
   try {
     const { email, password } = req.body;
 
@@ -60,6 +62,8 @@ router.post('/login', async (req, res) => {
       },
     });
   } catch (error) {
+    console.error('❌ Login error:', err);
+   
     res.status(500).json({ message: 'Login failed', error: error.message });
   }
 });
